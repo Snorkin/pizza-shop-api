@@ -23,4 +23,11 @@ export class UsersService {
     const users = await this.userRepository.find();
     return users;
   }
+
+  async findUserByLogin(loginOrEmail: string) {
+    const user = this.userRepository.findOne({
+      where: [{ login: loginOrEmail }, { email: loginOrEmail }],
+    });
+    return user;
+  }
 }

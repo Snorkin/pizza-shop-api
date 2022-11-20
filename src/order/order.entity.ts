@@ -1,31 +1,36 @@
+import { User } from '@app/users/users.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
 } from 'typeorm';
-
-export enum enumStatus {
-  Pending = 'Pending',
-  Payed = 'Payed',
-  Done = 'Done',
-  Declined = 'Decliened',
-}
+import { OrderContent } from './orderContent/orderContent.entity';
 
 @Entity('Orders')
-export class Orders {
+export class Order {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn()
+  user: User;
 
   @Column()
   price: number;
 
   @Column()
-  payment: number;
+  status: string;
 
   @Column()
-  status: enumStatus;
+  address: string;
+
+  @Column()
+  comment: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
