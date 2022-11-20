@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from './order.entity';
 import { createBrotliDecompress } from 'zlib';
@@ -11,5 +11,10 @@ export class OrderController {
   @Post('/createOrder')
   createOrder(@Body() dto: CreateOrderDto) {
     return this.orderService.createOrder(dto);
+  }
+
+  @Get('/getOrder')
+  getOrder(@Query() query) {
+    return this.orderService.findOrder(query);
   }
 }

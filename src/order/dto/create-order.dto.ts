@@ -1,5 +1,5 @@
 export interface orderStatus {
-  status: 'Pending' | 'Delivering' | 'Done' | 'Declined';
+  status: 'pending' | 'delivering' | 'done' | 'declined';
 }
 
 export class OrderContent {

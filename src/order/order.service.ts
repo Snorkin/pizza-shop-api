@@ -1,6 +1,6 @@
 import { OrderContent } from './orderContent/orderContent.entity';
 import { User } from '@app/users/users.entity';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -42,5 +42,18 @@ export class OrderService {
       });
       this.orderContentRepository.save(orderContent);
     });
+  }
+
+  async findOrder({ id }) {
+    console.log(id);
+
+    const order = this.orderContentRepository
+      .createQueryBuilder('orderContent')
+      .leftJoinAndSelect('orderContent.order', 'order')
+      .leftJoinAndSelect('orderContent.product', 'product')
+      .where(`order.userId = :uid`, { uid: id })
+      .andWhere('order.status != :status', { status: 'done' })
+      .getMany();
+    return order;
   }
 }
