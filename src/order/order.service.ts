@@ -1,6 +1,6 @@
 import { OrderContent } from './orderContent/orderContent.entity';
 import { User } from '@app/users/users.entity';
-import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -31,7 +31,7 @@ export class OrderService {
       address: dto.address,
       comment: dto.comment,
     });
-    this.orderRepository.save(newOrder);
+    await this.orderRepository.save(newOrder);
 
     dto.items.map(async (item) => {
       const orderContent = await this.orderContentRepository.create({
@@ -40,12 +40,12 @@ export class OrderService {
         count: item.count,
         price: item.price,
       });
-      this.orderContentRepository.save(orderContent);
+      await this.orderContentRepository.save(orderContent);
     });
   }
 
-  async findOrder({ id }) {
-    console.log(id);
+  async findOrder(req) {
+    const { id } = req.query;
 
     const order = this.orderContentRepository
       .createQueryBuilder('orderContent')

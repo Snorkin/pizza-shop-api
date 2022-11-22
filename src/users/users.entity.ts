@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -56,6 +55,9 @@ export class User {
   @ApiProperty({ example: 'Admin', description: 'Admin | User | Worker' })
   @Column()
   role: enumRole;
+
+  @Column()
+  activated: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

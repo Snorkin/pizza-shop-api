@@ -1,10 +1,25 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
-import { Order } from './order.entity';
-import { createBrotliDecompress } from 'zlib';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { Request } from 'express';
+import { JwtAuthGuard } from '@app/auth/jwtAuth.guard';
+import { Roles } from '@app/auth/roles.decorator';
+import { RoleGuard } from '@app/auth/role.guard';
 
+// @Roles('admin')
+// @UseGuards(RoleGuard)
 @Controller('/order')
+@UseGuards(JwtAuthGuard)
 export class OrderController {
   constructor(private orderService: OrderService) {}
 
@@ -14,7 +29,7 @@ export class OrderController {
   }
 
   @Get('/getOrder')
-  getOrder(@Query() query) {
-    return this.orderService.findOrder(query);
+  getOrder(@Req() req: Request) {
+    return this.orderService.findOrder(req);
   }
 }

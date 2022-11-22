@@ -1,4 +1,3 @@
-import { imgPizza, imgProduct } from './../products/products.entity';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import * as path from 'path';
 import * as fs from 'fs';

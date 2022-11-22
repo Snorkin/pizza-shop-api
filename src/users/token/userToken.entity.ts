@@ -1,4 +1,3 @@
-import { User } from '@app/users/users.entity';
 import {
   Entity,
   Column,
@@ -9,26 +8,19 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity('Orders')
-export class Order {
+import { User } from '../users.entity';
+
+@Entity('UserTokens')
+export class UserToken {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id, { cascade: true })
   @JoinColumn()
   user: User;
 
   @Column()
-  price: number;
-
-  @Column()
-  status: string;
-
-  @Column()
-  address: string;
-
-  @Column()
-  comment: string;
+  refreshToken: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

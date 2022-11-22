@@ -1,34 +1,26 @@
-import { User } from '@app/users/users.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
-@Entity('Orders')
-export class Order {
+import { User } from '../users.entity';
+
+@Entity('ActivationLinks')
+export class ActivationLink {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @OneToOne(() => User, { cascade: true })
   @JoinColumn()
   user: User;
 
   @Column()
-  price: number;
-
-  @Column()
-  status: string;
-
-  @Column()
-  address: string;
-
-  @Column()
-  comment: string;
+  activationLink: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

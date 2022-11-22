@@ -1,6 +1,6 @@
 import { FilesService } from './../files/files.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { Product, imgPizza, imgProduct } from './products.entity';
+import { Product } from './products.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
