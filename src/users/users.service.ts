@@ -16,7 +16,7 @@ export class UsersService {
 
   async createUser(dto: CreateUserDto) {
     const user = new User();
-    Object.assign(user, { ...dto, activated: false });
+    Object.assign(user, { ...dto, activated: false, role: 'user' });
     await this.userRepository.save(user);
 
     return user;

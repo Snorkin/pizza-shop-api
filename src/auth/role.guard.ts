@@ -31,6 +31,7 @@ export class RoleGuard implements CanActivate {
     const bearer = authHeader.split(' ')[0];
     const accessToken = authHeader.split(' ')[1];
     const refreshToken = req.cookies.refreshToken;
+    console.log(refreshToken);
 
     if (bearer !== 'Bearer' || !accessToken) {
       throw new HttpException(

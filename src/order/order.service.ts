@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './order.entity';
+import { UserToken } from '@app/users/token/userToken.entity';
 
 @Injectable()
 export class OrderService {
@@ -44,14 +45,12 @@ export class OrderService {
     });
   }
 
-  async findOrder(req) {
-    const { id } = req.query;
-
+  async findOrder(user) {
     const order = this.orderContentRepository
       .createQueryBuilder('orderContent')
       .leftJoinAndSelect('orderContent.order', 'order')
       .leftJoinAndSelect('orderContent.product', 'product')
-      .where(`order.userId = :uid`, { uid: id })
+      .where(`order.userId = :uid`, { uid: user.id })
       .andWhere('order.status != :status', { status: 'done' })
       .getMany();
     return order;

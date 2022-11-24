@@ -1,3 +1,4 @@
+import { TokenService } from '@app/users/token/token.service';
 import {
   Body,
   Controller,
@@ -21,7 +22,10 @@ import { RoleGuard } from '@app/auth/role.guard';
 @Controller('/order')
 @UseGuards(JwtAuthGuard)
 export class OrderController {
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private tokenService: TokenService
+  ) {}
 
   @Post('/createOrder')
   createOrder(@Body() dto: CreateOrderDto) {
@@ -30,6 +34,7 @@ export class OrderController {
 
   @Get('/getOrder')
   getOrder(@Req() req: Request) {
-    return this.orderService.findOrder(req);
+    const user = this.tokenService.findUserByToken(req);
+    return this.orderService.findOrder(user);
   }
 }

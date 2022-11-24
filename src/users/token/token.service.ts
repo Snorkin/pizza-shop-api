@@ -31,12 +31,18 @@ export class TokenService {
     return { accessToken, refreshToken };
   }
 
-  async saveToken(user: User, refreshToken) {
+  async saveToken(user: User, refreshToken, ip) {
+    console.log(user);
+    console.log(ip);
+
     const tokenUpdate = await this.userTokenRepository.findOne({
       where: { user: user },
     });
+    console.log(tokenUpdate);
+
     if (tokenUpdate) {
       tokenUpdate.refreshToken = refreshToken;
+
       this.userTokenRepository.save(tokenUpdate);
       return tokenUpdate;
     }
@@ -53,7 +59,8 @@ export class TokenService {
       where: { refreshToken: token },
     });
     if (userToken) {
-      return await this.userTokenRepository.remove(userToken);
+      await this.userTokenRepository.remove(userToken);
+      return null;
     }
   }
 

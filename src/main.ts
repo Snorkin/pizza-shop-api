@@ -16,7 +16,7 @@ async function bootstrap() {
     .build();
   const docs = SwaggerModule.createDocument(app, swagger);
   SwaggerModule.setup('/api/docs', app, docs);
-  app.enableCors();
+  app.enableCors({ origin: true, credentials: true });
   app.use(cookieParser());
   await app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 }

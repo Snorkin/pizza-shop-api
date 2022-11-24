@@ -22,9 +22,15 @@ export class AuthController {
   @Post('/login')
   async login(
     @Body() userDto: LoginUserDto,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response
   ) {
-    return await this.authService.login(userDto, res);
+    const user = await this.authService.login(userDto, req);
+    res.cookie('refreshToken', user.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+    return { accessToken: user.accessToken };
   }
 
   @Post('/logout')
@@ -35,9 +41,10 @@ export class AuthController {
   @Post('/registration')
   async registration(
     @Body() userDto: CreateUserDto,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response
   ) {
-    return await this.authService.registration(userDto, res);
+    return await this.authService.registration(userDto, req, res);
   }
 
   @Get('/refresh')

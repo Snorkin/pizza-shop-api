@@ -16,19 +16,12 @@ export class AuthService {
     private mailService: MailService
   ) {}
 
-  async login(userDto: LoginUserDto, res: Response) {
+  async login(userDto: LoginUserDto, req: Request) {
     const user = await this.validateUser(userDto);
     const tokens = await this.tokenService.generateTokens();
-    await this.tokenService.saveToken(user, tokens.refreshToken);
-    res.cookie('refreshToken', tokens.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
+    await this.tokenService.saveToken(user, tokens.refreshToken, req.ip);
     return {
-      userId: user.id,
-      login: user.login,
-      email: user.email,
-      activated: user.activated,
+      ...user,
       ...tokens,
     };
   }
@@ -39,7 +32,7 @@ export class AuthService {
     return await this.tokenService.removeToken(refreshToken);
   }
 
-  async registration(userDto: CreateUserDto, res: Response) {
+  async registration(userDto: CreateUserDto, req: Request, res: Response) {
     const checkLogin = await this.userService.findUserByLogin(userDto.login);
     const checkEmail = await this.userService.findUserByLogin(userDto.email);
     if (checkLogin) {
@@ -69,7 +62,7 @@ export class AuthService {
     //   `http://localhost:5000/auth/activate/${activationLink}`
     // );
     const tokens = this.tokenService.generateTokens();
-    this.tokenService.saveToken(user, tokens.refreshToken);
+    this.tokenService.saveToken(user, tokens.refreshToken, req.ip);
     res.cookie('refreshToken', tokens.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
